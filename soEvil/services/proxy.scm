@@ -55,11 +55,11 @@
    (package v2ray-bin)
    "The v2ray package to use, we need @command{v2ray}.")
   (config-file
-   (config-file %default-v2ray-conf)
+   (file-like %default-v2ray-conf)
    "configuration files."))
 (define v2ray-shepherd-service
   (match-lambda
-    (($ <v2ray-configuration> v2ray-bin conf-file)
+    (($ <v2ray-configuration> v2ray-bin config-file)
      (list (shepherd-service
             (documentation "Run v2ray.")
             (provision '(v2ray))
