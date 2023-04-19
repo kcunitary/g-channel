@@ -8,7 +8,7 @@
 (define-public v2ray-bin
   (package
     (name "v2ray-bin")
-    (version "5.3.0")
+    (version "5.4.1")
     (source (origin
               (method url-fetch/zipbomb)
               (uri (string-append
@@ -17,7 +17,7 @@
               (file-name (string-append "v2ray-bin-" version ".zip"))
               (sha256
                (base32
-                "171wglzyrijxxqhqfjyjf0hlkwp4vgj923p54gccdsi8f5sqkw3c"))))
+                "05mmzk6b2f9ivyb749b70s8l91q9n5h38zbzmzn3hzj0hf4pzhrc"))))
     (build-system copy-build-system)
     (arguments
      `(#:install-plan '(("v2ray" "bin/")

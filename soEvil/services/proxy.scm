@@ -66,17 +66,21 @@
             (requirement '(loopback))
             (start #~(make-forkexec-constructor
                       '(#$(file-append v2ray-bin "/bin/v2ray")
-                            "run -c" #$config-file)
+                            "run" "-c" #$(file-append config-file))
                       #:user "v2ray"
-                      #:group "v2ray"
-                      #:environment-variables '("QBT_ACCEPTED=true")))
+                      #:group "v2ray"))
             (stop #~(make-kill-destructor)))))))
-
-(define (v2ray-activation config)
-  #~(begin
-      (use-modules (guix build utils))
-
-      ))
+     (shepherd-service
+      (provision '(v2ray))
+      (requirement '(networking))
+      (documentation "")
+      (modules '((gnu build shepherd)
+                 (gnu system file-systems)))
+      (start #~(make-forkexec-constructor/container
+                #$v2ray-command
+                ;; #:namespaces '#$(delq 'net %namespaces)
+                #:log-file "/var/log/v2ray.log")
+      (stop #~(make-kill-destructor))))))
 
 (define v2ray-service-type
   (service-type
@@ -84,9 +88,6 @@
    (extensions
     (list (service-extension shepherd-root-service-type
                              v2ray-shepherd-service)
-          (service-extension activation-service-type
-                             v2ray-activation)
-          (service-extension account-service-type
-                             (const %v2ray-accounts))))
+          ))
    (default-value (v2ray-configuration))
    (description "Run v2ray daemon.")))
